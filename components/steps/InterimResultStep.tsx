@@ -100,7 +100,7 @@ export const InterimResultStep: React.FC<InterimResultStepProps> = ({ onComplete
              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
           </div>
           <h3 className="text-sm font-mono text-slate-400 uppercase mb-1">Risk Profile</h3>
-          <p className="text-white font-bold text-lg">LOW RISK (12)</p>
+          <p className="text-white font-bold text-lg">HIGH RISK (12)</p>
           <div className="w-full h-1 bg-slate-800 mt-4 rounded-full overflow-hidden">
              <div className="h-full bg-emerald-500 w-full" />
           </div>
