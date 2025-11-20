@@ -1,0 +1,7 @@
+{
+  "name": "ProjectChimeraSide",
+  "description": "A futuristic, automated identity verification and risk analysis system.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
