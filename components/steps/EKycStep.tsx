@@ -29,10 +29,11 @@ export const EKycStep: React.FC<EKycStepProps> = ({ onComplete }) => {
     startCamera();
 
     // Sequence timer
+    // Reduced duration: 1.5s scan + 1s wait = 2.5s total
     const timer = setTimeout(() => {
       setScanComplete(true);
-      setTimeout(onComplete, 1500); // Wait a bit after showing verified
-    }, 3500);
+      setTimeout(onComplete, 1000); 
+    }, 1500);
 
     return () => {
       clearTimeout(timer);
@@ -79,7 +80,7 @@ export const EKycStep: React.FC<EKycStepProps> = ({ onComplete }) => {
           <motion.div
             className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.8)] z-10"
             animate={{ top: ["0%", "100%", "0%"] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
           />
         )}
 

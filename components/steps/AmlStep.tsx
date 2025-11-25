@@ -9,13 +9,13 @@ interface AmlStepProps {
 
 // Mock txn data
 const TXN_DATA = [
-  { day: 'M', risk: 10 },
-  { day: 'T', risk: 15 },
-  { day: 'W', risk: 8 },
-  { day: 'T', risk: 45 }, // Spike
-  { day: 'F', risk: 12 },
-  { day: 'S', risk: 5 },
-  { day: 'S', risk: 8 },
+  { day: 'M', risk: 25 },
+  { day: 'T', risk: 45 },
+  { day: 'W', risk: 30 },
+  { day: 'T', risk: 85 }, // Major Spike
+  { day: 'F', risk: 65 },
+  { day: 'S', risk: 40 },
+  { day: 'S', risk: 90 }, // Critical Spike
 ];
 
 export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
@@ -24,37 +24,32 @@ export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
   
   useEffect(() => {
     let startTime = Date.now();
-    const duration = 5000; // Increased to 5 seconds for better pacing
+    // Reduced duration: 1.5s scan + 1s wait = 2.5s total
+    const duration = 1500; 
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
       const progress = elapsed / duration;
 
       if (progress >= 1) {
-        setScore(12);
+        setScore(88); // Set to High Risk
         setIsFinished(true);
         clearInterval(interval);
-        setTimeout(onComplete, 1500);
+        setTimeout(onComplete, 1000);
       } else {
-        // Dynamic Animation Curve:
-        // 1. Ramp up quickly to simulate finding potential risks (0-40%)
-        // 2. Hover at high risk while "analyzing" (40-70%)
-        // 3. Resolve down to low risk as checks pass (70-100%)
-        
-        if (progress < 0.4) {
-          // Ramp up to ~75
-          const p = progress / 0.4;
-          setScore(Math.floor(p * 75));
-        } else if (progress < 0.7) {
-          // Hover / Jitter around 75-85
-          const noise = Math.sin(elapsed * 0.01) * 5;
-          setScore(Math.floor(75 + noise + (Math.random() * 5)));
+        // Curve for High Risk
+        // Ramp up quickly then stabilize at high numbers
+        if (progress < 0.6) {
+           // 0 to 80 fast
+           const p = progress / 0.6;
+           setScore(Math.floor(p * 80));
         } else {
-          // Drop down to 12
-          const p = (progress - 0.7) / 0.3;
-          // Lerp from ~75 down to 12
-          const currentStart = 75; 
-          setScore(Math.floor(currentStart - (p * (currentStart - 12))));
+           // 80 to 88 with noise/jitter
+           const base = 80;
+           const remaining = (progress - 0.6) / 0.4; // 0 to 1
+           const val = base + (remaining * 8);
+           const noise = Math.random() * 4;
+           setScore(Math.min(99, Math.floor(val + noise)));
         }
       }
     }, 30);
@@ -67,9 +62,9 @@ export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
         
         {/* Left: The Score Gauge */}
-        <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6 flex flex-col items-center relative overflow-hidden">
+        <div className={`bg-slate-900/50 border ${isFinished ? 'border-rose-500/50' : 'border-slate-700'} rounded-xl p-6 flex flex-col items-center relative overflow-hidden transition-colors duration-500`}>
             <h3 className="text-sm font-mono text-slate-400 mb-4 w-full flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4" /> RISK PROBABILITY
+              <ShieldAlert className={`w-4 h-4 ${isFinished ? 'text-rose-500' : 'text-slate-400'}`} /> RISK PROBABILITY
             </h3>
             
             <div className="w-48 h-48 relative">
@@ -87,7 +82,7 @@ export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
                      dataKey="value"
                      stroke="none"
                    >
-                     <Cell fill={score > 50 ? "#f43f5e" : "#10b981"} /> {/* Changes color based on risk level */}
+                     <Cell fill={score > 50 ? "#f43f5e" : "#10b981"} />
                      <Cell fill="#334155" />
                    </Pie>
                  </PieChart>
@@ -138,9 +133,9 @@ export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
                     itemStyle={{ color: '#e2e8f0', fontSize: '12px' }}
                     cursor={{fill: 'rgba(255,255,255,0.05)'}}
                  />
-                 <Bar dataKey="risk" fill="#3b82f6" radius={[4, 4, 0, 0]}>
+                 <Bar dataKey="risk" radius={[4, 4, 0, 0]}>
                     {TXN_DATA.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.risk > 40 ? '#f43f5e' : '#3b82f6'} />
+                      <Cell key={`cell-${index}`} fill={entry.risk > 60 ? '#f43f5e' : '#3b82f6'} />
                     ))}
                  </Bar>
                </BarChart>
@@ -149,20 +144,20 @@ export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
           <div className="mt-4 text-xs text-slate-400 font-mono space-y-1">
             <p className="flex justify-between">
               <span>Structuring Checks:</span> 
-              <span className={isFinished ? "text-emerald-400" : "text-slate-500"}>
-                {isFinished ? "PASSED" : "ANALYZING..."}
+              <span className={isFinished ? "text-rose-400 font-bold" : "text-slate-500"}>
+                {isFinished ? "DETECTED" : "ANALYZING..."}
               </span>
             </p>
             <p className="flex justify-between">
               <span>Velocity Rules:</span> 
-              <span className={isFinished ? "text-emerald-400" : "text-slate-500"}>
-                 {isFinished ? "PASSED" : "PENDING"}
+              <span className={isFinished ? "text-orange-400" : "text-slate-500"}>
+                 {isFinished ? "FLAGGED" : "PENDING"}
               </span>
             </p>
             <p className="flex justify-between">
               <span>Jurisdiction Risk:</span> 
-              <span className={isFinished ? "text-emerald-400" : "text-slate-500"}>
-                 {isFinished ? "TIER 1 (SAFE)" : "CALCULATING..."}
+              <span className={isFinished ? "text-rose-400 font-bold" : "text-slate-500"}>
+                 {isFinished ? "TIER 3 (HIGH)" : "CALCULATING..."}
               </span>
             </p>
           </div>
@@ -177,10 +172,10 @@ export const AmlStep: React.FC<AmlStepProps> = ({ onComplete }) => {
           className="mt-8"
         >
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-mono tracking-tighter">
-              AML RISK: LOW
+            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400 font-mono tracking-tighter">
+              AML RISK: CRITICAL
             </h1>
-            <p className="text-slate-500 text-sm mt-2">Automated Scorecard Generated</p>
+            <p className="text-rose-400/70 text-sm mt-2 font-bold animate-pulse">EDD PROTOCOL TRIGGERED</p>
           </div>
         </motion.div>
       )}

@@ -29,7 +29,8 @@ export const WorldCheckStep: React.FC<WorldCheckStepProps> = ({ onComplete }) =>
     let logInterval: number;
     
     const startTime = Date.now();
-    const duration = 6000; // Increased duration to 6 seconds
+    // Reduced duration: 2s scan + 1s wait = 3s total
+    const duration = 2000; 
 
     interval = window.setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -44,7 +45,7 @@ export const WorldCheckStep: React.FC<WorldCheckStepProps> = ({ onComplete }) =>
       if (newProgress >= 100) {
         clearInterval(interval);
         clearInterval(logInterval);
-        setTimeout(onComplete, 1500);
+        setTimeout(onComplete, 1000);
       }
     }, 16);
 

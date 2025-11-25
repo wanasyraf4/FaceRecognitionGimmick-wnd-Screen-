@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ShieldCheck, Globe, Activity, Lock } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, Globe, Activity, Lock, AlertTriangle } from 'lucide-react';
 
 interface InterimResultStepProps {
   onComplete: () => void;
@@ -50,8 +50,9 @@ export const InterimResultStep: React.FC<InterimResultStepProps> = ({ onComplete
           <h2 className="text-2xl font-bold font-mono text-white tracking-tight">PRELIMINARY RESULTS</h2>
           <p className="text-slate-500 font-mono text-sm">PHASE 1 ANALYSIS COMPLETE</p>
         </div>
-        <div className="text-emerald-400 bg-emerald-950/30 py-1 px-3 rounded border border-emerald-500/30 text-xs font-mono">
-           STATUS: CLEARED
+        <div className="text-orange-400 bg-orange-950/30 py-1 px-3 rounded border border-orange-500/30 text-xs font-mono flex items-center gap-2">
+           <AlertTriangle className="w-3 h-3" />
+           STATUS: ACTION REQUIRED
         </div>
       </motion.div>
 
@@ -94,15 +95,15 @@ export const InterimResultStep: React.FC<InterimResultStepProps> = ({ onComplete
         {/* Result 3: AML Score */}
         <motion.div variants={item} className="bg-slate-900/40 border border-slate-700 p-6 rounded-xl flex flex-col relative overflow-hidden group backdrop-blur-sm">
            <div className="flex justify-between items-start mb-4">
-             <div className="p-3 bg-slate-800 rounded-lg text-rose-400 group-hover:text-emerald-400 transition-colors">
+             <div className="p-3 bg-slate-800 rounded-lg text-rose-400 group-hover:text-rose-500 transition-colors">
                <Activity className="w-6 h-6" />
              </div>
-             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+             <AlertTriangle className="w-5 h-5 text-rose-500 animate-pulse" />
           </div>
           <h3 className="text-sm font-mono text-slate-400 uppercase mb-1">Risk Profile</h3>
-          <p className="text-white font-bold text-lg">HIGH RISK (12)</p>
+          <p className="text-white font-bold text-lg">HIGH RISK (88)</p>
           <div className="w-full h-1 bg-slate-800 mt-4 rounded-full overflow-hidden">
-             <div className="h-full bg-emerald-500 w-full" />
+             <div className="h-full bg-rose-500 w-full" />
           </div>
         </motion.div>
       </motion.div>
