@@ -40,17 +40,17 @@ function App() {
     if (status === AnalysisStatus.APPROVAL) {
       const timer = setTimeout(() => {
         setStatus(AnalysisStatus.GENERATING);
-      }, 7000); // Increased from 5000 to 7000
+      }, 7000); 
       return () => clearTimeout(timer);
     }
   }, [status]);
 
-  // 3. GENERATING (5s) -> ONBOARDING
+  // 3. GENERATING (3s) -> ONBOARDING
   useEffect(() => {
     if (status === AnalysisStatus.GENERATING) {
       const timer = setTimeout(() => {
         setStatus(AnalysisStatus.ONBOARDING);
-      }, 5000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -89,7 +89,7 @@ function App() {
     if (status === AnalysisStatus.COMPLETE || 
         status === AnalysisStatus.FINALIZING || 
         status === AnalysisStatus.APPROVAL || 
-        status === AnalysisStatus.GENERATING || 
+        status === AnalysisStatus.GENERATING ||
         status === AnalysisStatus.ONBOARDING) return StepStatus.COMPLETE;
     if (index < currentStepIndex) return StepStatus.COMPLETE;
     if (index === currentStepIndex) return StepStatus.ACTIVE;
@@ -234,12 +234,12 @@ function App() {
           {status === AnalysisStatus.GENERATING && (
              <motion.div 
                key="generating"
-               initial={{ opacity: 0, scale: 0.9 }}
-               animate={{ opacity: 1, scale: 1 }}
-               exit={{ opacity: 0, scale: 1.1 }}
-               className="w-full max-w-4xl h-[50vh] border border-slate-800 bg-slate-900/50 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden"
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0, scale: 0.9 }}
+               className="flex-1 w-full flex items-center justify-center z-50"
              >
-               <ReportGeneration />
+                <ReportGeneration />
              </motion.div>
           )}
 
@@ -268,7 +268,7 @@ function App() {
                  transition={{ delay: 0.2, duration: 0.8 }}
                  className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-cyan-100 to-emerald-200 drop-shadow-[0_0_30px_rgba(6,182,212,0.3)] leading-tight max-w-7xl mx-auto"
                >
-                 Welcome to Labuan International Compliance Conference 2025
+                 WELCOME TO LABUAN INTERNATIONAL COMPLIANCE CONFERENCE 2025
                </motion.h1>
 
                <motion.div 

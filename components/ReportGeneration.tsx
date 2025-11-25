@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { FileJson, Binary, Lock, HardDrive, CheckCircle2 } from 'lucide-react';
 
 export const ReportGeneration: React.FC = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  
-  const processingSteps = [
-    "SYNTHESIZING RISK NARRATIVE",
-    "ENCRYPTING SENSITIVE METADATA",
-    "GENERATING IMMUTABLE HASH",
-    "COMMITTING TO LEDGER"
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveStep(prev => (prev < processingSteps.length - 1 ? prev + 1 : prev));
-    }, 1100); // Cycles through steps
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-6">
       <div className="relative mb-10">
@@ -71,27 +54,12 @@ export const ReportGeneration: React.FC = () => {
       {/* Status Text */}
       <div className="flex flex-col items-center gap-2">
         <h3 className="text-lg font-mono font-bold text-white tracking-wider">
-          {processingSteps[activeStep]}
+          SYNTHESIZING FINAL REPORT
         </h3>
         <div className="flex items-center gap-2 text-xs text-cyan-500/70 font-mono">
           <Binary className="w-3 h-3 animate-pulse" />
-          <span>PROCESSING BLOCK {Math.floor(Math.random() * 9000) + 1000}</span>
+          <span>ENCRYPTING SENSITIVE METADATA...</span>
         </div>
-      </div>
-
-      {/* Progress Steps */}
-      <div className="flex gap-2 mt-8">
-        {processingSteps.map((_, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ backgroundColor: "#1e293b" }} // slate-800
-            animate={{ 
-              backgroundColor: idx <= activeStep ? "#06b6d4" : "#1e293b", // cyan-500 or slate-800
-              scale: idx === activeStep ? 1.2 : 1
-            }}
-            className="w-16 h-1.5 rounded-full"
-          />
-        ))}
       </div>
       
       <div className="mt-12 grid grid-cols-3 gap-8 text-center opacity-60">
